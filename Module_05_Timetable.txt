@@ -1,0 +1,345 @@
+DMI CAMPUS CONNECT
+
+Module Brief
+
+MODULE 5
+
+Timetable
+
+Owner
+
+Developer 5
+
+Depends On
+
+Module 1, Module 2, Module 3
+
+Backend Stack
+
+Python · Flask · MongoDB Atlas
+
+Frontend Stack
+
+Next.js · React.js · Tailwind CSS
+
+Blocks
+
+Module 4 (Attendance register reads this) · Module 8 (Exam scheduling reuses conflict logic)
+
+Status
+
+Build after Modules 1–3 are stable
+
+AI Tooling
+
+Antigravity / CLI-based AI coding assistant
+
+Risk Level
+
+MEDIUM — conflict detection must be exact
+
+This module builds the weekly timetable — entry storage, conflict detection so the same faculty or room is never double-booked, and the views every role sees: Student/Faculty weekly grids, a Faculty's combined personal schedule, and HOD/Admin timetable creation and editing.
+
+1  Module Summary
+
+Module 5 owns the weekly class schedule — which subject meets in which room, taught by which faculty member, in which period, on which day — for every section in the institute. Its single most important responsibility is conflict detection: making sure the schedule that gets saved is physically possible to actually run.
+
+Why conflict detection matters
+
+•  A timetable that double-books a room or a faculty member isn't a cosmetic bug — it makes the schedule undeliverable in the real world.
+
+•  Module 4 (Attendance) drives its register screen directly from this module's timetable data, so a wrong or missing entry here blocks Faculty from marking attendance correctly.
+
+•  Module 8 (Examinations) reuses the same double-booking prevention logic for exam hall/session scheduling — build this module's conflict check as something that can be reused, not a one-off.
+
+1.1 What This Module Owns
+
+Timetable entry storage — per section, per semester: day, period, start/end time, room, subject, and teaching faculty
+
+Conflict detection — preventing the same faculty member or the same room from being double-booked in the same period/day
+
+Weekly timetable view for Student and Faculty (read-only)
+
+A Faculty member's personal combined timetable, derived across every section they teach
+
+HOD/Admin timetable creation and editing, with conflicts surfaced clearly before saving
+
+1.2 What This Module Does NOT Own
+
+Which subjects exist and who teaches them — that's Module 3 (Subject and Faculty allocation); this module only schedules already-allocated subject/faculty pairs into time slots
+
+Attendance marking — that's Module 4, which reads this module's data to know what's scheduled on a given date/period
+
+Exam scheduling and hall/seat allocation — that's Module 8, which follows a similar but separate conflict-detection pattern for exam sessions rather than weekly recurring classes
+
+2  Backend — Flask + MongoDB Atlas
+
+2.1 Data Model
+
+// timetable_entries collection
+
+{
+
+  "_id": ObjectId("..."),
+
+  "section_id": ObjectId("..."),     // references sections._id (Module 3)
+
+  "subject_id": ObjectId("..."),     // references subjects._id (Module 3)
+
+  "faculty_id": ObjectId("..."),     // references users._id, role = faculty (Module 1)
+
+  "day_of_week": "monday",           // monday..saturday
+
+  "period": 3,
+
+  "start_time": "10:00",
+
+  "end_time": "10:50",
+
+  "room": "LH-204",
+
+  "semester_id": ObjectId("...")     // references semesters._id (Module 3)
+
+}
+
+2.2 The Conflict Detection Rule
+
+A timetable entry is only savable if, for the same day_of_week + period, neither the faculty_id nor the room already appears in another entry for the same semester_id
+
+•  This check runs on every create AND every edit — including moving an existing entry to a new slot.
+
+•  Check faculty and room conflicts independently and report both if they both occur — don't stop at the first one found and hide the second.
+
+•  The same logic is reused (not duplicated) by Module 8 for exam hall/session scheduling — write it as a standalone, importable function.
+
+2.3 API Endpoints Owned by This Module
+
+Method & Path
+
+Purpose
+
+Auth Required
+
+GET /api/timetable/section/:section_id
+
+Weekly grid for one section (Student/Faculty read view)
+
+Yes (any role)
+
+GET /api/timetable/faculty/me
+
+The logged-in Faculty's combined personal schedule across all sections they teach
+
+Yes (Faculty)
+
+POST /api/timetable/entries
+
+Create a timetable entry; runs conflict detection before saving
+
+Yes (HOD, Admin)
+
+PATCH /api/timetable/entries/:id
+
+Edit/move an entry; re-runs conflict detection against the new slot
+
+Yes (HOD, Admin)
+
+DELETE /api/timetable/entries/:id
+
+Remove an entry
+
+Yes (HOD, Admin)
+
+POST /api/timetable/check-conflict
+
+Dry-run conflict check without saving — used by the frontend to warn before submit
+
+Yes (HOD, Admin)
+
+2.4 Conflict Response Shape
+
+When a conflict is detected, the API returns a structured, specific error — never a generic "conflict" message the frontend can't usefully display:
+
+{
+
+  "error": {
+
+    "code": "SCHEDULE_CONFLICT",
+
+    "message": "This slot is unavailable",
+
+    "conflicts": [
+
+      { "type": "faculty", "faculty_name": "Dr. R. Menon",
+
+        "conflicting_section": "CSE Sem 5, Section A", "subject": "Operating Systems" },
+
+      { "type": "room", "room": "LH-204",
+
+        "conflicting_section": "ECE Sem 3, Section C", "subject": "Circuits Lab" }
+
+    ]
+
+  }
+
+}
+
+2.5 MongoDB Indexes
+
+Collection
+
+Index
+
+Why
+
+timetable_entries
+
+{ section_id: 1, semester_id: 1 }
+
+Fast weekly-grid lookup per section
+
+timetable_entries
+
+{ faculty_id: 1, day_of_week: 1, period: 1, semester_id: 1 }
+
+Fast conflict check on faculty double-booking
+
+timetable_entries
+
+{ room: 1, day_of_week: 1, period: 1, semester_id: 1 }
+
+Fast conflict check on room double-booking
+
+3  Frontend — Next.js, React & Tailwind CSS
+
+All screens use Module 2's shared components (Card, Badge, Button, PageHeader, EmptyState, ErrorState) — the weekly grid is the one new visual pattern this module introduces, and it should be built once and reused identically across every screen that shows a timetable.
+
+3.1 Screens Owned by This Module
+
+Screen
+
+Route
+
+Who Sees It
+
+Weekly Timetable
+
+/timetable
+
+Student, Faculty — read-only grid for their own section / combined schedule
+
+Timetable Admin
+
+/hod/timetable or /admin/timetable
+
+HOD (own department), Admin (institute-wide) — create/edit with conflict warnings
+
+3.2 The Weekly Grid Component
+
+A single reusable grid component (days as columns, periods as rows) renders three ways depending on context: a Student's section schedule, a Faculty's combined schedule (cells may show different sections back-to-back), and the HOD/Admin editable view (same grid, but cells are clickable to add/edit an entry). Build one component with a mode prop rather than three separate grids.
+
+3.3 Conflict Warning UX
+
+Before submitting a new/edited entry, the Admin screen calls POST /api/timetable/check-conflict and shows any conflicts inline, next to the slot being edited — not as a generic toast notification
+
+Conflicts are shown using the structured detail from Section 2.4 (which faculty, which room, which other section) so the person editing the timetable can immediately see what to change
+
+The actual POST/PATCH save is still conflict-checked server-side regardless of what the dry-run showed — the frontend check is a convenience, never the enforcement point
+
+4  Integration Contract (What Other Modules Depend On)
+
+4.1 Backend Exports
+
+check_schedule_conflict(day, period, faculty_id, room, semester_id, exclude_entry_id=None) — the shared conflict-detection function; Module 8 imports this same function for exam scheduling rather than reimplementing the logic
+
+get_scheduled_class(section_id, subject_id, date, period) — used by Module 4's attendance register screen to confirm a class is actually scheduled before allowing Faculty to mark it
+
+4.2 What This Module Depends On
+
+Module 3's section_id, subject_id, and faculty_id data — every timetable entry references these and creation should validate they exist
+
+4.3 Consumers
+
+Module 4 (Attendance) — the register-marking screen is driven by this module's schedule for a given date
+
+Module 8 (Examinations) — reuses the conflict-detection function for hall/session scheduling
+
+Module 2's dashboard widgets — "today's classes" for Faculty, "today's timetable" for Students
+
+Coordinate with Module 8's owner on the shared conflict function
+
+•  Design check_schedule_conflict as a general-purpose function from the start (parameterized by day/period/resource, not hard-coded to weekly class scheduling) so Module 8 can call it for exam halls/sessions without a rewrite.
+
+5  Building This Module with AI (Antigravity / CLI Coding Assistant)
+
+5.1 Suggested Prompting Sequence
+
+Step
+
+What to Ask the AI Assistant
+
+1
+
+"Implement the timetable_entries schema from Section 2.1 with the indexes in Section 2.5."
+
+2
+
+"Write check_schedule_conflict as a standalone, reusable function implementing the rule in Section 2.2 — it must check faculty and room conflicts independently and return both if present, in the shape from Section 2.4."
+
+3
+
+"Write unit tests for check_schedule_conflict FIRST: a clean slot, a faculty-only conflict, a room-only conflict, both at once, and editing an entry into its own current slot (should not conflict with itself)."
+
+4
+
+"Implement the 6 endpoints in Section 2.3 using that function."
+
+5
+
+"Build a single reusable weekly grid component with a mode prop (student/faculty read view vs. HOD/Admin editable view), using Module 2's shared components for everything else."
+
+5.2 What to Verify By Hand
+
+Editing an entry back into its own original slot does not falsely report a conflict with itself (the exclude_entry_id parameter is actually used)
+
+A faculty conflict and a room conflict occurring at once are both reported, not just the first one found
+
+The frontend's dry-run conflict check never becomes the only enforcement — confirm the backend save endpoint independently re-validates
+
+6  Testing Checklist
+
+6.1 Backend Tests
+
+Creating two entries for the same faculty, same day/period, different sections is rejected
+
+Creating two entries for the same room, same day/period, different sections is rejected
+
+Creating an entry with a different day OR different period for the same faculty/room succeeds
+
+Editing an entry's room while keeping its day/period/faculty the same does not conflict with its own prior version
+
+get_scheduled_class correctly returns nothing for a date/period with no timetable entry, without erroring
+
+6.2 Frontend Tests
+
+The weekly grid correctly renders in all three modes (Student, Faculty combined, HOD/Admin editable)
+
+A conflict returned from the dry-run check is displayed with the specific faculty/room/section detail, not a generic message
+
+The grid remains usable at tablet width per Module 2's responsive baseline
+
+7  Definition of Done
+
+This module is complete when:
+
+•  timetable_entries exists with the indexes in Section 2.5.
+
+•  check_schedule_conflict is implemented, tested against every case in Section 6.1, and published for Module 8 to reuse.
+
+•  All 6 endpoints in Section 2.3 are implemented and tested.
+
+•  The reusable weekly grid component renders correctly in all three modes and is used by both screens in Section 3.1.
+
+•  Module 4's attendance register screen can successfully call get_scheduled_class end-to-end.
+
+•  Every item in the Testing Checklist (Section 6) passes.

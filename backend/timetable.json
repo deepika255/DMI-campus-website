@@ -1,0 +1,262 @@
+[
+  {
+    "id": 1787766814202,
+    "day": "Monday",
+    "subject": "computer networks",
+    "faculty": "Arya",
+    "room": "l-12",
+    "startTime": "09:00",
+    "endTime": "09:50",
+    "time": "09:00-09:50"
+  },
+  {
+    "id": 1787766850452,
+    "day": "Monday",
+    "subject": "MBA",
+    "faculty": "Jessica",
+    "room": "l-9",
+    "startTime": "10:00",
+    "endTime": "10:50",
+    "time": "10:00-10:50"
+  },
+  {
+    "id": 1787766878267,
+    "day": "Tuesday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "11:00",
+    "endTime": "11:50",
+    "time": "11:00-11:50"
+  },
+  {
+    "id": 1787766904150,
+    "day": "Monday",
+    "subject": "criminology",
+    "faculty": "JD",
+    "room": "l-9",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787766928961,
+    "day": "Monday",
+    "subject": "criminology",
+    "faculty": "JD",
+    "room": "l-9",
+    "startTime": "14:00",
+    "endTime": "14:50",
+    "time": "14:00-14:50"
+  },
+  {
+    "id": 1787766977111,
+    "day": "Tuesday",
+    "subject": "criminology",
+    "faculty": "JD",
+    "room": "l-9",
+    "startTime": "09:00",
+    "endTime": "09:50",
+    "time": "09:00-09:50"
+  },
+  {
+    "id": 1787767018944,
+    "day": "Monday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-9",
+    "startTime": "10:00",
+    "endTime": "10:50",
+    "time": "10:00-10:50"
+  },
+  {
+    "id": 1787767049185,
+    "day": "Tuesday",
+    "subject": "MBA",
+    "faculty": "Jessica",
+    "room": "l-9",
+    "startTime": "11:00",
+    "endTime": "11:50",
+    "time": "11:00-11:50"
+  },
+  {
+    "id": 1787767072346,
+    "day": "Tuesday",
+    "subject": "AI Engineer",
+    "faculty": "vishwa",
+    "room": "l-9",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787767141537,
+    "day": "Tuesday",
+    "subject": "AI Engineer",
+    "faculty": "vishwa",
+    "room": "l-17",
+    "startTime": "14:00",
+    "endTime": "14:50",
+    "time": "14:00-14:50"
+  },
+  {
+    "id": 1787767295661,
+    "day": "Wednesday",
+    "subject": "AI Engineer",
+    "faculty": "vishwa",
+    "room": "l-15",
+    "startTime": "09:00",
+    "endTime": "09:50",
+    "time": "09:00-09:50"
+  },
+  {
+    "id": 1787767341465,
+    "day": "Wednesday",
+    "subject": "computer networks",
+    "faculty": "Arya",
+    "room": "l-17",
+    "startTime": "10:00",
+    "endTime": "10:50",
+    "time": "10:00-10:50"
+  },
+  {
+    "id": 1787767376324,
+    "day": "Wednesday",
+    "subject": "MBA",
+    "faculty": "Jessica",
+    "room": "l-15",
+    "startTime": "11:00",
+    "endTime": "11:50",
+    "time": "11:00-11:50"
+  },
+  {
+    "id": 1787767472631,
+    "day": "Wednesday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787767497505,
+    "day": "Wednesday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "14:00",
+    "endTime": "14:50",
+    "time": "14:00-14:50"
+  },
+  {
+    "id": 1787767544702,
+    "day": "Thursday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "09:00",
+    "endTime": "09:50",
+    "time": "09:00-09:50"
+  },
+  {
+    "id": 1787767612361,
+    "day": "Thursday",
+    "subject": "AI Engineer",
+    "faculty": "vishwa",
+    "room": "l-17",
+    "startTime": "10:00",
+    "endTime": "10:50",
+    "time": "10:00-10:50"
+  },
+  {
+    "id": 1787767645530,
+    "day": "Thursday",
+    "subject": "criminology",
+    "faculty": "JD",
+    "room": "l-17",
+    "startTime": "11:00",
+    "endTime": "11:50",
+    "time": "11:00-11:50"
+  },
+  {
+    "id": 1787767670183,
+    "day": "Thursday",
+    "subject": "computer networks",
+    "faculty": "Arya",
+    "room": "l-17",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787767716364,
+    "day": "Thursday",
+    "subject": "computer networks",
+    "faculty": "Arya",
+    "room": "l-17",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787767861274,
+    "day": "Friday",
+    "subject": "computer networks",
+    "faculty": "Arya",
+    "room": "l-17",
+    "startTime": "09:00",
+    "endTime": "09:50",
+    "time": "09:00-09:50"
+  },
+  {
+    "id": 1787767904008,
+    "day": "Friday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "10:00",
+    "endTime": "10:50",
+    "time": "10:00-10:50"
+  },
+  {
+    "id": 1787767938504,
+    "day": "Friday",
+    "subject": "AI Engineer",
+    "faculty": "vishwa",
+    "room": "l-17",
+    "startTime": "11:00",
+    "endTime": "11:50",
+    "time": "11:00-11:50"
+  },
+  {
+    "id": 1787767962605,
+    "day": "Friday",
+    "subject": "MBA",
+    "faculty": "Jessica",
+    "room": "l-17",
+    "startTime": "12:00",
+    "endTime": "12:50",
+    "time": "12:00-12:50"
+  },
+  {
+    "id": 1787767984644,
+    "day": "Friday",
+    "subject": "MBA",
+    "faculty": "Jessica",
+    "room": "l-17",
+    "startTime": "14:00",
+    "endTime": "14:50",
+    "time": "14:00-14:50"
+  },
+  {
+    "id": 1788446194576,
+    "day": "Monday",
+    "subject": "Computer networks ",
+    "faculty": "Arya",
+    "room": "L9",
+    "startTime": "09:00",
+    "endTime": "10:00",
+    "time": "09:00-10:00"
+  }
+]
