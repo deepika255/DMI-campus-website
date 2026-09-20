@@ -258,5 +258,15 @@
     "startTime": "09:00",
     "endTime": "10:00",
     "time": "09:00-10:00"
+  },
+  {
+    "id": 1789893163622,
+    "day": "Monday",
+    "subject": "UI/UX",
+    "faculty": "Abhi",
+    "room": "l-17",
+    "startTime": "09:00",
+    "endTime": "10:00",
+    "time": "09:00-10:00"
   }
 ]
