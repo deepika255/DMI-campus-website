@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-const API_URL = "http://localhost:5000/api/timetable";
+const API_URL = "http://10.146.224.3:5000/api/timetable";
 
 const days = [
   "Monday",
